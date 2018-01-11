@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function showUsage {
-    echo "Usage:  " `basename ${0}`" -p -s <suffix> -e <extension>"
+    echo "Usage:  " `basename ${0}`" [-p] [-v] [-s <suffix>] [-e <extension>]"
 }
 
 if [ $# -lt 2 ]; 
