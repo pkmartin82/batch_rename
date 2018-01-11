@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function showUsage {
-    echo "Usage:  " `basename ${0}`" -p -s <suffix> -e <extension>"
+    echo "Usage:  " `basename ${0}`" -p [-f] -s <suffix> -e <extension>"
 }
 
 if [ $# -lt 2 ]; 
@@ -10,7 +10,7 @@ then
     exit 1
 fi
 
-while getopts "pvs:e:" o; do
+while getopts "pvfs:e:" o; do
     case "${o}" in
 	p)
 	    previewOnly=true
@@ -24,6 +24,9 @@ while getopts "pvs:e:" o; do
 	v) 
 	    verbose=true
 	    ;;
+	f)
+	    force=true
+	    ;;
         *)
 	    showUsage
             ;;
@@ -36,6 +39,7 @@ if [[ "${verbose}" = "true" ]]
 then
 	echo "VERBOSE = ${verbose}"
 	echo "PREVIEW ONLY = ${previewOnly}"
+	echo "FORCE = ${force}"
 	echo "EXT = ${ext}"
 	echo "SUFFIX = ${suffix}"
 fi
@@ -56,7 +60,18 @@ do
 		then
 			echo "Moving ${FILE} to ${NEWFILE}"
 		fi
-		mv "${FILE}" "${NEWFILE}"
+		if [[ "${force}" = "true" ]]
+		then
+			mv "${FILE}" "${NEWFILE}"
+		else
+			echo "Are you sure you want to rename ${FILE} to ${NEWFILE}?"
+			select yn in "Yes" "No"; do
+    				case $yn in
+        				Yes ) mv "${FILE}" "${NEWFILE}"; break;;
+        				No ) exit;;
+    				esac
+			done
+		fi
 	fi
 done
 
