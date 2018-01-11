@@ -68,10 +68,15 @@ do
 			select yn in "Yes" "No"; do
     				case $yn in
         				Yes ) mv "${FILE}" "${NEWFILE}"; break;;
-        				No ) exit;;
+        				No ) echo "Skipping ${FILE}"; break;;
     				esac
 			done
 		fi
 	fi
 done
+
+if [[ "${verbose}" = "true" ]]
+then
+	echo "All files renamed"
+fi
 
